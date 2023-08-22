@@ -53,3 +53,10 @@
   align-items: center;
 }
 
+.button:disabled{
+  border-color: #777878;
+  color: #fff;
+  background: #777878 !important;
+  box-shadow: inset 12em 0 0 0 #777878 !important;
+}
+
