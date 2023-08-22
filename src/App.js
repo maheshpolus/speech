@@ -8,10 +8,12 @@ function App() {
 	const [token, setToken] = useState();
 	const [language, setLanguage] = useState(false);
 	const [buttonStatus, setButtonStatus] = useState(false);
+	const [confidence, setConfidence] = useState(false);
 	const shoot = async () => {
 		setButtonStatus(true)
 		const response = await window.doPronunciationAssessmentOnceAsync(token,language);
-		await speechService.saveSpeechToServer(base, response);
+		const data = await speechService.saveSpeechToServer(base, response);
+		setConfidence(data.PronunciationAssessment.AccuracyScore);
 		setButtonStatus(false);
 	}
 
@@ -24,11 +26,21 @@ function App() {
 			.catch(e => console.error(e));
 	}, []);
 
+	function Status() {
+		if(!confidence) {
+			return null;
+		} else if(confidence && confidence >= 70) {
+			return <span>Great Job!</span>
+		} else if(confidence && confidence < 70) {
+			return <span>Please say it again.</span>
+		}
+	}
+
 
 	return (
 		<div className="container">
 			<div className="card">
-				<span className="text">Hola, me llamo Jorge.</span>
+				<div className="text"><span >Hola, me llamo Jorge.</span></div>
 				<div>
 					<button className="button slide" id='scenarioStartButton' onClick={shoot} disabled={buttonStatus}>
 						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" id="microphone">
@@ -38,6 +50,7 @@ function App() {
 						</svg>
 						<span >Tap to speak</span>
 					</button>
+					<div className="text"><Status/></div>
 				</div>
 			</div>
 		</div>
