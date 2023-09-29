@@ -17,9 +17,13 @@ const Stopwatch = (props) => {
   }, [isRunning, time]);
 
   useEffect(() => {
-        setTime(0);
-        startAndStop();
-  }, [props.start])
+    // setTime(0);
+    startAndStop();
+  }, [props.start]);
+
+  useEffect(() => {
+    reset();
+  }, [props.watchstarted]);
 
   // Hours calculation
   const hours = Math.floor(time / 360000);
@@ -49,14 +53,6 @@ const Stopwatch = (props) => {
         {seconds.toString().padStart(2, "0")}:
         {milliseconds.toString().padStart(2, "0")}
       </p>
-      <div className="stopwatch-buttons">
-        <button className="stopwatch-button" onClick={startAndStop}>
-          {isRunning ? "Stop" : "Start"}
-        </button>
-        <button className="stopwatch-button" onClick={reset}>
-          Reset
-        </button>
-      </div>
     </div>
   );
 };
